@@ -124,6 +124,21 @@ class User {
 			return $this;
 		} return null;
 	}
+
+	//Tim kiem username, kiem tra neu co ton tai username trong csdl thi thông bao 
+	// da ton tai va yeu cau chon 1 username khac de dang nhap
+	public function findUsername($var)
+	{
+		$stmt = $this->db->prepare('select * from nguoidung where username = :var');
+		$stmt->execute(['var' => $var]);
+		if ($row = $stmt->fetch()) {
+			$this->fillFromDB($row);
+			return $this;
+		} return null;
+	}
+
+
+
 //
 //Cap nhat hoac them du lieu (Neu id ton tai thi cap nhat nguoi dung dua tren id,
 // Neu id khong ton tai <= 0 thi them du lieu moi)
@@ -132,7 +147,7 @@ class User {
 		$result = false;
 		if ($this->id > 0) {
 			$stmt = $this->db->prepare('update nguoidung set fullname = :fullname,
-			username = :username, password = :password, diachi = :diachi, updated_at = now()
+			username = :username, password = :password, diachi = :diachi, updated_day = now()
 			where id = :id');
 			$result = $stmt->execute([
 			'fullname' => $this->fullname,
@@ -142,8 +157,8 @@ class User {
 			'id' => $this->id]);
 		} else {
 			$stmt = $this->db->prepare(
-			'insert into nguoidung (fullname, username, password, diachi, created_at, updated_at)
-			values (:fullname, :username, :password, diachi, now(), now())');
+			'insert into nguoidung (fullname, username, password, diachi, created_day, updated_day)
+			values (:fullname, :username, :password, :diachi, now(), now())');
 			$result = $stmt->execute([
 			'fullname' => $this->fullname,
 			'username' => $this->username,

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 08, 2022 lúc 03:56 PM
+-- Thời gian đã tạo: Th10 08, 2022 lúc 04:16 PM
 -- Phiên bản máy phục vụ: 10.4.24-MariaDB
 -- Phiên bản PHP: 8.0.19
 
@@ -55,13 +55,6 @@ CREATE TABLE `chitietgiohang` (
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Đang đổ dữ liệu cho bảng `chitietgiohang`
---
-
-INSERT INTO `chitietgiohang` (`cart_id`, `product_id`, `quantity`) VALUES
-(27, 40, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -102,14 +95,6 @@ CREATE TABLE `giohang` (
   `updated_day` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Đang đổ dữ liệu cho bảng `giohang`
---
-
-INSERT INTO `giohang` (`cart_id`, `user_id`, `added_day`, `updated_day`) VALUES
-(20, 8, '2022-11-05 12:53:24', '2022-11-05 12:53:24'),
-(27, 8, '2022-11-08 13:58:06', '2022-11-08 13:58:06');
-
 -- --------------------------------------------------------
 
 --
@@ -139,8 +124,9 @@ INSERT INTO `nguoidung` (`id`, `admin`, `fullname`, `username`, `password`, `dia
 (6, 0, 'Tran Van B', 'B1910146', '12345678', '', '2022-10-26 06:08:30', '2022-10-26 06:08:30'),
 (7, 0, 'Trần Văn Thiệt', 'B1910146', 'Fr0g19o3', '', '2022-10-27 07:46:17', '2022-10-27 07:46:17'),
 (8, 1, 'tintin', 'tin', '123456', '', '2022-11-03 18:08:43', '2022-11-03 18:08:43'),
-(9, 0, 'ádasdas', 'ádasdsad', '123456', 'long hồ dồng nai bắn cạn', '2022-11-04 13:12:57', '2022-11-04 13:12:57'),
-(10, 0, 'Nguyễn Thị Kim Chi', 'chi chi', '123456', 'Cần thơ', '2022-11-04 13:13:18', '2022-11-04 13:13:18');
+(10, 0, 'Nguyễn Thị Kim Chi', 'chi chi', '123456', 'Cần thơ', '2022-11-04 13:13:18', '2022-11-04 13:13:18'),
+(11, 0, 'Trần Văn Thiệt', 'thiet', '123456', 'An Giang', '2022-11-08 15:14:59', '2022-11-08 15:14:59'),
+(12, 0, 'Nguyễn Hữu Tín', 'tintin', '123456', 'Vĩnh Long', '2022-11-08 15:16:05', '2022-11-08 15:16:05');
 
 -- --------------------------------------------------------
 
@@ -170,8 +156,7 @@ INSERT INTO `sanpham` (`id`, `name`, `price`, `description`, `category_id`, `ima
 (15, 'Máy Ảnh Fujifilm X-A5 Kit 15-45 mm', 13800000, 'TecHland – nhà phân phối chính thức các sản phẩm Máy Ảnh Fujifilm X-A5 chính hãng giá rẻ tại Cần thơ', 2, 'fuji2.PNG', '2022-11-04 05:18:23', '2022-11-05 12:03:45'),
 (16, 'Flycam DJI Mavic Air Chất lượng cao', 15500000, 'TecHland chuyên cung cấp các sản phẩm máy bay điều khiển Flycam DJI Mavic Air chính hãng giá rẻ tại Cần thơ', 3, 'flycam1.PNG', '2022-11-04 12:36:59', '2022-11-05 12:51:11'),
 (17, 'Máy Ảnh Hasselblad X1D-50c Body', 29000000, 'TecHland chuyên cung cấp sản phẩm Máy Ảnh Hasselblad X1D-50c Body chính hãng với giá rẻ tại Cần thơ', 5, 'has1.PNG', '2022-11-05 12:07:55', '2022-11-05 12:08:22'),
-(18, 'Máy Quay Camera Hành Trình GoPro Hero 8', 7100000, 'Quay video 4K UHD & slow motion\r\n•  Ổn định videoHyperSmooth 2.0\r\n•  Ổn định cho video time-lapse TimeWarp 2.0\r\n•  Chụp ảnh SuperPhoto 12MP hỗ trợ HDR', 4, 'cam1.PNG', '2022-11-05 12:10:26', '2022-11-05 12:10:50'),
-(40, 'A', 9090909, 'AE', 3, 'Array', '2022-11-08 13:57:59', '2022-11-08 13:57:59');
+(18, 'Máy Quay Camera Hành Trình GoPro Hero 8', 7100000, 'Quay video 4K UHD & slow motion\r\n•  Ổn định videoHyperSmooth 2.0\r\n•  Ổn định cho video time-lapse TimeWarp 2.0\r\n•  Chụp ảnh SuperPhoto 12MP hỗ trợ HDR', 4, 'cam1.PNG', '2022-11-05 12:10:26', '2022-11-05 12:10:50');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -242,7 +227,7 @@ ALTER TABLE `giohang`
 -- AUTO_INCREMENT cho bảng `nguoidung`
 --
 ALTER TABLE `nguoidung`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `sanpham`

@@ -6,13 +6,22 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if ($_POST['password'] == $_POST['password2']) {
 		$user = new User($PDO);
+		$findUser = $user->findUsername($_POST['username']);
+		$user = new User($PDO);
 		$user->fill($_POST);
-		if ($user->validate()) {
-			$user->save(); 
-			echo '<script>alert("Đăng ký thành công.");</script>';
-			echo '<script>window.location.href= "login.php";</script>';
-			// header("Location: login.php");
-		} $errors = $user->getValidationErrors();
+		if ($findUser->username != $_POST['username']) {
+			if ($user->validate()) {
+				$user->save(); 
+				echo '<script>alert("Đăng ký thành công.");</script>';
+				echo '<script>window.location.href= "login.php";</script>';
+				// header("Location: login.php");
+			} 
+		}else {
+				echo '<script>alert("Đăng ký không thành công, Tài khoản đã tồn tại.");</script>';
+				echo '<script>window.location.href= "register.php";</script>';
+			} 
+		$errors = $user->getValidationErrors();
+		// print_r($errors);
 		if (isset($errors['fullname'])) {
 			// $username = $_POST['username'];
 			// $diachi = $_POST['diachi'];
@@ -33,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			echo '<script>alert("Mật khẩu không hợp lệ.");</script>';
 			echo "<script>window.location.href= 'register.php?fullname=$fullname&username=$username';</script>";
 		}
-		
 	} else {
 		$username = $_POST['username'];
 		$fullname = $_POST['fullname'];

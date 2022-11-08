@@ -3,22 +3,18 @@ include "C:/xampp/apps/project/bootstrap.php";
 
 use CT275\Project\Product;
 use CT275\Project\User;
-
 $product = new Product($PDO);
 $user = new User($PDO);
 $users = $user->getUser();
 $products = $product->all();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shop Máy Ảnh</title>
-
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -31,7 +27,6 @@ $products = $product->all();
   <link href="<?= BASE_URL_PATH . "css/animate.css" ?>" rel=" stylesheet">
   <link href="<?= BASE_URL_PATH . "css/style.css" ?>" rel=" stylesheet">
 </head>
-
 <body>
   <!-- Main Page Content -->
   <div class="container">
@@ -43,35 +38,26 @@ $products = $product->all();
         <a href="manage_user.php" class="col-6  btn btn-outline-info  my-sm-0" style="height:150px;">
           <i class="fa fa-users p-3" aria-hidden="true" style="font-size: 80px;"></i>
           <p>Quản lý người dùng</p>
-
         </a>
-
       </div>
       <div class="col-4">
         <a href="manage_Pro.php" class="col-6  btn btn-outline-info  my-sm-0" style="height: 150px;">
           <i class="fa fa-shopping-cart p-3" aria-hidden="true" style="font-size: 80px;"></i>
           <p>Quản lý sản phẩm</p>
-
         </a>
       </div>
       <div class="col-4">
         <a href="manage_order.php" class="col-6  btn btn-outline-info  my-sm-0" style="height:150px;">
           <i class="fa fa-money p-3" aria-hidden="true" style="font-size: 80px;"> </i>
           <p>Quản lý đơn hàng</p>
-
         </a>
       </div>
-
     </div>
     <hr>
-
     <?php include('C:/xampp/apps/project/partials/footer.php'); ?>
   </div>
-
-
   <script src="<?= BASE_URL_PATH . " js/wow.min.js" ?>">
   </script>
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"> </script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"> </script>

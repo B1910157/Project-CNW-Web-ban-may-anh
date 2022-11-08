@@ -84,9 +84,9 @@ $categorys = $category->all();
 
                         <tr>
                             <td>Mô tả sản phẩm</td>
-                            <td><textarea require name="description" id="" cols="30" rows="5" placeholder="Mô tả sản phẩm" value="<?php if (isset($_GET['description'])) {
+                            <td><textarea require name="description" id="" cols="30" rows="5" placeholder="Mô tả sản phẩm" ><?php if (isset($_GET['description'])) {
                                                                                                                                         echo $_GET['description'];
-                                                                                                                                    } ?>"></textarea></td>
+                                                                                                                                    } ?></textarea></td>
                         </tr>
 
                         <tr>

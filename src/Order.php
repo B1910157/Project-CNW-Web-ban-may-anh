@@ -24,10 +24,18 @@ class Order
 		$this->db = $pdo;
 	}
 
-	public function insertOrder($cart_id){
+	public function insertOrder(array $data)
+	{
+		$this->fill($data);
+		if ($this->validate()) {
+			return $this->insertOrder2();
+		} return false;
+	}
+///???
+	public function insertOrder2(){
 		$total_price = 0;
 		$result = $this->db->prepare('select gh.*,ctgh.quantity,sp.price from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id inner join sanpham sp on ctgh.product_id = sp.id where gh.cart_id = :cart_id');
-		$result->execute(['cart_id' => $cart_id]);
+		$result->execute(['cart_id' => $this->cart_id]);
 		// $cart = $result->fetch();
 		foreach ($result as $cart) {
 			$total_price = $total_price + $cart['quantity']*$cart['price'];
@@ -38,19 +46,21 @@ class Order
 		'insert into donhang (user_id, cart_id, total_price, status, created_day)
 		values (:user_id, :cart_id, :total_price, 0, now())');
 		$order = $stmt->execute([
-		'user_id' => $cart['user_id'],
-		'cart_id' => $cart['cart_id'],
+		'user_id' => $this->userID,
+		'cart_id' => $this->cart_id,
 		'total_price' => $total_price
 		]);
 		$sql = $this->db->prepare('delete from chitietgiohang where cart_id = :cart_id');
-		$delcart = $sql->execute(['cart_id' => $cart_id]);
+		$delcart = $sql->execute(['cart_id' => $this->cart_id]);
 		$sql = $this->db->prepare('delete from giohang where cart_id = :cart_id');
-		$delcart2 = $sql->execute(['cart_id' => $cart_id]);
+		$delcart2 = $sql->execute(['cart_id' => $this->cart_id]);
 		if ($order) {
 			$this->id = $this->db->lastInsertId();
 		}
 	return $order;
 	}
+
+	//tim don dat hang cua 1 user dua tren usser_id
 	public function getOrders($id){
 		$orders = [];
 		$stmt = $this->db->prepare('select * from donhang where user_id = :id');
@@ -62,7 +72,9 @@ class Order
 		} return $orders;
 	}
 
-	public function getAll(){
+	
+
+	public function all(){
 		$orders = [];
 		$stmt = $this->db->prepare('select * from donhang order by order_id desc');
 		$stmt->execute();
@@ -73,63 +85,56 @@ class Order
 		} return $orders;
 	}
 
-	public function update($id){
-		$stmt = $this->db->prepare('update donhang set status = 1 where order_id = :id');
-			$result = $stmt->execute(['id' => $id]);
+	
+	//Lay du lieu tu input de dua vao  csdl
+	public function fill(array $data)
+	{
+		if (isset($data['userID'])) {
+			$this->userID = trim($data['userID']);
+		}
+
+		if (isset($data['cart_id'])) {
+			$this->cart_id = trim($data['cart_id']);
+		}
+
+		if (isset($data['status'])) {
+			$this->status = trim($data['status']);
+		}
+
+		if (isset($data['total_price'])) {
+			$this->total_price = trim($data['total_price']);
+		}
+
+		return $this;
 	}
 
-	// public function fill(array $data)
-	// {
-	// 	if (isset($data['userID'])) {
-	// 		$this->userID = trim($data['userID']);
-	// 	}
+	public function getValidationErrors()
+	{
+		return $this->errors;
+	}
 
-	// 	if (isset($data['productID'])) {
-	// 		$this->products['product_id'] = trim($data['productID']);
-	// 	}
+	public function validate()
+	{
+		if (!$this->userID) {
+			$this->errors['userID'] = 'ID người dùng không hợp lệ.';
+		}
 
-	// 	if (isset($data['quantity'])) {
-	// 		$this->quantity = trim($data['quantity']);
-	// 	}
+		if (!$this->cart_id) {
+			$this->errors['cart_id'] = 'ID giỏ hàng không hợp lệ.';
+		}
 
-	// 	return $this;
-	// }
+		if ($this->status < 0) {
+			$this->errors['status'] = 'Trạng thái không hợp lệ.';
+		}
 
-	// public function getValidationErrors()
-	// {
-	// 	return $this->errors;
-	// }
+		if ($this->total_price < 0) {
+			$this->errors['total_price'] = 'Tổng tiền không hợp lệ.';
+		}
 
-	// public function validate()
-	// {
-	// 	if (!$this->fullname) {
-	// 		$this->errors['fullname'] = 'Tên người dùng không hợp lệ.';
-	// 	}
-
-	// 	if (!$this->username) {
-	// 		$this->errors['username'] = 'Tên đăng nhập không hợp lệ.';
-	// 	} elseif (strlen($this->username) < 8) {
-	// 		$this->errors['username'] = 'Tên đăng nhập phải hơn 8 ký tự.';
-	// 	}
-
-	// 	if (strlen($this->password) < 8) {
-	// 		$this->errors['password'] = 'Mật khẩu phải hơn 8 ký tự.';
-	// 	}
-
-	// 	return empty($this->errors);
-	// }
-	// public function all()
-	// {
-	// 	$carts = [];
-	// 	$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id');
-	// 	$stmt->execute();
-	// 	while ($row = $stmt->fetch()) {
-	// 		$cart = new Cart($this->db);
-	// 		$cart->fillFromDB($row);
-	// 		$carts[] = $cart;
-	// 	} return $carts;
-	// } 
+		return empty($this->errors);
+	}
 	
+	//Lay du lieu ti csdl
 	protected function fillFromDB(array $row)
 	{
 		[
@@ -142,52 +147,58 @@ class Order
 		] = $row;
 		return $this;
 	}
- 
-	// public function save()
-	// {
-	// 	$result = false;
-	// 	if ($this->id >= 0) {
-	// 		$stmt = $this->db->prepare('update chitietgiohang set product_id = :product_id,
-	// 		quantity = :quantity, updated_day = now()
-	// 		where cart_id = :cart_id');
-	// 		$result = $stmt->execute([
-	// 		'product_id' => $this->product_id,
-	// 		'quantity' => $this->quantity,
-	// 		'cart_id' => $this->id]);
-	// 	} else {
-	// 		$stmt = $this->db->prepare(
-	// 		'insert into chitietgiohang (product_id, quantity, added_day, updated_day)
-	// 		values (:product_id, :quantity, now(), now())');
-	// 		$result = $stmt->execute([
-	// 		'product_id' => $this->product_id,
-	// 		'quantity' => $this->quantity]);
-	// 		if ($result) {
-	// 			$this->id = $this->db->lastInsertId();
-	// 		}
-	// 	} return $result;
-	// }
-
+ //Update orr insert
+	public function save()
+	{
+		$result = false;
+		if ($this->id >= 0) {
+			$stmt = $this->db->prepare('update donhang set status = 1
+			where order_id = :order_id');
+			$result = $stmt->execute([
+			'order_id' => $this->id]);
+		} else {
+			$stmt = $this->db->prepare(
+			'insert into donhang (user_id, cart_id, total_price, status, added_day, updated_day)
+			values (:user_id, :cart_id, :total_price, 0, now(), now())');
+			$result = $stmt->execute([
+			'user_id' => $this->userID,
+			'cart_id' => $this->cart_id,
+			'total_price' => $this->total_price]);
+			if ($result) {
+				$this->id = $this->db->lastInsertId();
+			}
+		} return $result;
+	}
+//search  dua tren user_id
 	public function find($id)
 	{
+		$orders = [];
 		$stmt = $this->db->prepare('select * from donhang where user_id = :id');
-		return $stmt->execute(['id' => $id]);
+		$stmt->execute(['id' => $id]);
+		while ($row = $stmt->fetch()) {
+			$order = new Order($this->db);
+			$order->fillFromDB($row);
+			$orders[] = $order;
+		} return $orders;
+	} 
+//Tim kiem dua tren order_id
+	public function find2($id)
+	{
+		$stmt = $this->db->prepare('select * from donhang where order_id = :id');
+		$stmt->execute(['id' => $id]);
 		if ($row = $stmt->fetch()) {
 			$this->fillFromDB($row);
 			return $this;
 		} return null;
+	}
 
-	} 
-	// // public function update(array $data)
-	// // {
-	// // 	$this->fill($data);
-	// // 	if ($this->validate()) {
-	// // 		return $this->save();
-	// // 	} return false;
-	// // }
+	public function update(array $data)
+	{
+		$this->fill($data);
+		if ($this->validate()) {
+			return $this->save();
+		} return false;
+	}
 
-	// public function delete()
-	// {
-	// 	$stmt = $this->db->prepare('delete from nguoidung where id = :id');
-	// 	return $stmt->execute(['id' => $this->id]);
-	// }
+	
 }

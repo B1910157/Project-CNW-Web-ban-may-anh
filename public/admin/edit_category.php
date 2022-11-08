@@ -4,6 +4,7 @@ include "C:/xampp/apps/project/bootstrap.php";
 
 use CT275\Project\Product;
 use CT275\Project\Category;
+
 $product = new Product($PDO);
 $category =  new Category($PDO);
 // $categorys = $category->all();
@@ -17,7 +18,6 @@ if ($id < 0 || !($category->find($id))) {
 //echo "<script>alert('".$id."');</script>";
 ?>
 <?PHP
-
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -77,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Sửa sản phẩm
                   </button>
                 </td>
-                <!-- <td  colspan="2" class="text-right"><input  type="submit" value="Thêm sản phẩm" name="themsanpham"></td> -->
               </tr>
             </table>
           </form>
@@ -99,4 +99,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       });
     </script>
 </body>
+
 </html>

@@ -10,7 +10,7 @@ if (isset($_SESSION['id_user'])) {
 $category = new Category($PDO);
 $cart = new Cart($PDO);
 $product = new Product($PDO);
-$product_detail = $product->getProduct($_GET['id']);
+$product_detail = $product->find($_GET['id']);
 $checkcart = $cart->getCart3($_SESSION['id_user'],$product_detail->getId());
 if (isset($checkcart) && $checkcart != null) {
 	$inStock = 0;
@@ -19,25 +19,43 @@ if (isset($checkcart) && $checkcart != null) {
 	} else $inStock = 0;
 	if ($inStock == 1) {
 		$newVal = ($_GET['quantity']+$checkcart->quantity);
-		$update_cart = $cart->update_cart($checkcart->getId(),$newVal,$_GET['id']);
+		$array1 = [];
+		$array1['cart_id'] = $checkcart->getId();
+		$array1['quantity'] = $newVal;
+		$array1['productID'] = $_GET['id'];
+		$update_cart = $cart->update_cart($array1);
     	echo "<script>alert('Sản phẩm đã có trong giỏ hàng,đã cập nhật số lượng.');</script>";
     	echo '<script>window.location.href = "detail.php?id='.$_GET['id'].'"</script>';
 	} else {
-		$insert_cart = $cart->insert_cart($checkcart->getId(),$_GET['id'],$_GET['quantity']);
-    	echo "<script>alert('Đã thêm sản phẩm vào giỏ hàng.');</script>";
+		$array2 = [];
+		$array2['cart_id'] = $checkcart->getId();
+		$array2['quantity'] = $newVal;
+		$array2['productID'] = $_GET['id'];
+		$insert_cart = $cart->insert_cart($array2);
+    	echo "<script>alert('Đã thêm sản phẩm vào giỏ hàng!');</script>";
     	echo '<script>window.location.href = "detail.php?id='.$_GET['id'].'"</script>';
 	}
 } else {
 	$result = $cart->find($_SESSION['id_user']);
 	if ($result == null) {
-		$add_new = $cart->addNewCart($_SESSION['id_user'],$result['cart_id'],$_GET['id'],$_GET['quantity']);
-	    echo "<script>alert('Đã thêm sản phẩm vào giỏ hàng!');</script>";
+		$array3 = [];
+		$array3['userID'] = $_SESSION['id_user'];
+		$array3['productID'] = $_GET['id'];
+		$array3['quantity'] = $_GET['quantity'];
+		$add_new = $cart->addNewCart($array3);
+	    echo "<script>alert('Đã thêm sản phẩm vào giỏ hàng!!');</script>";
+	    // print_r($array3);
     	echo '<script>window.location.href = "detail.php?id='.$_GET['id'].'"</script>';
 	} else {
-		$user_id = $_SESSION['id_user'];
-		$result = $cart->find($user_id);
-	    $insertCart = $cart->insert_cart($result['cart_id'],$_GET['id'],$_GET['quantity']);
-	    echo "<script>alert('Đã thêm sản phẩm vào giỏ hàng!');</script>";
+		// $user_id = $_SESSION['id_user'];
+		// $result = $cart->find($user_id);
+		$array4 = [];
+		$array4['cart_id'] = $result->getId();
+		// echo $result->cart_id;
+		$array4['quantity'] = $_GET['quantity'];
+		$array4['productID'] = $_GET['id'];
+	    $insertCart = $cart->insert_cart($array4);
+	    echo "<script>alert('Đã thêm sản phẩm vào giỏ hàng!!!');</script>";
 	    echo '<script>window.location.href = "detail.php?id='.$_GET['id'].'"</script>';
 	}
 }

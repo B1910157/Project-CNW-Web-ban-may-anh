@@ -1,11 +1,8 @@
-<?php
-
+<?php 
 namespace CT275\Project;
+class User {
 
-class User
-{
 	private $db;
-
 	private $id = -1;
 	public $admin;
 	public $fullname;
@@ -16,16 +13,17 @@ class User
 	public $updated_day;
 	private $errors = [];
 
-	public function getId()
-	{
-		return $this->id;
-	}
-
 	public function __construct($pdo)
 	{
 		$this->db = $pdo;
 	}
 
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	//Them du lieu vao csdl tu input cua nguoi dung nhap vao
 	public function fill(array $data)
 	{
 		if (isset($data['fullname'])) {
@@ -63,13 +61,18 @@ class User
 
 		if (strlen($this->password) < 5) {
 			$this->errors['password'] = 'Mật khẩu phải hơn 5 ký tự.';
+		}elseif (!$this->password) {
+			$this->errors['password'] = 'Mật khẩu không hợp lệ.';
 		}
+
 		if (!$this->diachi) {
 			$this->errors['diachi'] = 'Lỗi địa chỉ.';
 		}
 
 		return empty($this->errors);
 	}
+
+	//Lay tat ca du lieu tu bang nguoidung
 	public function all()
 	{
 		$users = [];
@@ -79,10 +82,10 @@ class User
 			$user = new User($this->db);
 			$user->fillFromDB($row);
 			$users[] = $user;
-		}
-		return $users;
+		} return $users;
 	}
 
+	//Lay nguoi dung
 	public function getUser()
 	{
 		$users = [];
@@ -96,41 +99,22 @@ class User
 		return $users;
 	}
 
+	//Lay du lieu tu csdl
 	protected function fillFromDB(array $row)
 	{
 		[
-			'id' => $this->id,
-			'fullname' => $this->fullname,
-			'username' => $this->username,
-			'password' => $this->password,
-			'diachi' => $this->diachi,
-			'admin' => $this->admin,
-			'created_day' => $this->created_day,
-			'updated_day' => $this->updated_day
+		'id' => $this->id,
+		'admin' => $this->admin,
+		'fullname' => $this->fullname,
+		'username' => $this->username,
+		'password' => $this->password,
+		'diachi' => $this->diachi,
+		'created_day' => $this->created_day,
+		'updated_day' => $this->updated_day
 		] = $row;
 		return $this;
-	}
-	public function save()
-	{
-		$result = false;
-		if ($this->id < 0) {
-			$stmt = $this->db->prepare(
-				'insert into nguoidung (admin, fullname, username, password,diachi, created_day, updated_day)
-			values ("0", :fullname, :username, :password, :diachi, now(), now())'
-			);
-			$result = $stmt->execute([
-				'fullname' => $this->fullname,
-				'username' => $this->username,
-				'password' => $this->password,
-				'diachi' => $this->diachi
-			]);
-			if ($result) {
-				$this->id = $this->db->lastInsertId();
-			}
-		}
-		return $result;
-	}
-
+	} 
+//Tim nguoi dung
 	public function find($id)
 	{
 		$stmt = $this->db->prepare('select * from nguoidung where id = :id');
@@ -138,9 +122,40 @@ class User
 		if ($row = $stmt->fetch()) {
 			$this->fillFromDB($row);
 			return $this;
-		}
-		return null;
+		} return null;
 	}
+//
+//Cap nhat hoac them du lieu (Neu id ton tai thi cap nhat nguoi dung dua tren id,
+// Neu id khong ton tai <= 0 thi them du lieu moi)
+	public function save()
+	{
+		$result = false;
+		if ($this->id > 0) {
+			$stmt = $this->db->prepare('update nguoidung set fullname = :fullname,
+			username = :username, password = :password, diachi = :diachi, updated_at = now()
+			where id = :id');
+			$result = $stmt->execute([
+			'fullname' => $this->fullname,
+			'username' => $this->username,
+			'password' => $this->password,
+			'diachi' => $this->diachi,
+			'id' => $this->id]);
+		} else {
+			$stmt = $this->db->prepare(
+			'insert into nguoidung (fullname, username, password, diachi, created_at, updated_at)
+			values (:fullname, :username, :password, diachi, now(), now())');
+			$result = $stmt->execute([
+			'fullname' => $this->fullname,
+			'username' => $this->username,
+			'password' => $this->password,
+			'diachi' => $this->diachi]);
+			if ($result) {
+				$this->id = $this->db->lastInsertId();
+			}
+		} return $result;
+	}
+//
+//Cap nhat hoac them du lieu du lieu
 	public function update(array $data)
 	{
 		$this->fill($data);
@@ -149,13 +164,14 @@ class User
 		}
 		return false;
 	}
+
 	public function delete()
 	{
 		$stmt = $this->db->prepare('delete from nguoidung where id = :id');
 		return $stmt->execute(['id' => $this->id]);
 	}
-	
-	//Kiem tra dang nhap (Ket qua tra ve 1 dong thi tai khoan co ton tai va cho phep dang nhap)
+	//Kiem tra dang nhap
+	//Ham tra ve so dong sau khi thuc hien cau lenh 
 	public function checkpoint($username,$password){
 		$sql = "SELECT * from nguoidung where username =:u and password =:p";
 	    $query = $this->db->prepare($sql);
@@ -166,7 +182,8 @@ class User
 	    return $query->rowCount();
 	    //  return  $query->fetch();
 	}
-	//Kiem tra dang nhap (Lay username va password sau khi dang nhap thanh cong)
+	//Kiem tra dang nhap
+	//Ham tra ve mang du lieu username va password
 	public function checkpoint2($username,$password){
 		$sql = "SELECT * from nguoidung where username =:u and password =:p";
 	    $query = $this->db->prepare($sql);
@@ -178,3 +195,6 @@ class User
 	     return $query->fetch();
 	}
 }
+ 
+
+ ?>

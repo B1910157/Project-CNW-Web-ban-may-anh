@@ -24,46 +24,44 @@ class Cart
 		$this->db = $pdo;
 	}
 
-	// public function fill(array $data)
-	// {
-	// 	if (isset($data['userID'])) {
-	// 		$this->userID = trim($data['userID']);
-	// 	}
+	public function fill(array $data)
+	{
+		if (isset($data['userID'])) {
+			$this->userID = trim($data['userID']);
+		}
 
-	// 	if (isset($data['productID'])) {
-	// 		$this->products['product_id'] = trim($data['productID']);
-	// 	}
+		if (isset($data['productID'])) {
+			$this->product_id = trim($data['productID']);
+		}
 
-	// 	if (isset($data['quantity'])) {
-	// 		$this->quantity = trim($data['quantity']);
-	// 	}
+		if (isset($data['quantity'])) {
+			$this->quantity = trim($data['quantity']);
+		}
 
-	// 	return $this;
-	// }
+		return $this;
+	}
 
 	public function getValidationErrors()
 	{
 		return $this->errors;
 	}
 
-	// public function validate()
-	// {
-	// 	if (!$this->fullname) {
-	// 		$this->errors['fullname'] = 'Tên người dùng không hợp lệ.';
-	// 	}
+	public function validate()
+	{
+		if (!$this->userID) {
+			$this->errors['userID'] = 'ID người dùng không hợp lệ.';
+		}
 
-	// 	if (!$this->username) {
-	// 		$this->errors['username'] = 'Tên đăng nhập không hợp lệ.';
-	// 	} elseif (strlen($this->username) < 8) {
-	// 		$this->errors['username'] = 'Tên đăng nhập phải hơn 8 ký tự.';
-	// 	}
+		if (!$this->product_id) {
+			$this->errors['product_id'] = 'ID sản phẩm không hợp lệ.';
+		}
 
-	// 	if (strlen($this->password) < 8) {
-	// 		$this->errors['password'] = 'Mật khẩu phải hơn 8 ký tự.';
-	// 	}
+		if (!$this->quantity) {
+			$this->errors['quantity'] = 'Số lượng không hợp lệ.';
+		}
 
-	// 	return empty($this->errors);
-	// }
+		return empty($this->errors);
+	}
 	public function all()
 	{
 		$carts = [];
@@ -73,59 +71,35 @@ class Cart
 			$cart = new Cart($this->db);
 			$cart->fillFromDB($row);
 			$carts[] = $cart;
-		} return $carts;
-	} 
-	public function getCart($id) {
-		$carts = [];
-		$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id where gh.user_id = :id');
-		$stmt->execute(['id' => $id]);
-		while ($row = $stmt->fetch()) {
-			$cart = new Cart($this->db);
-			$cart->fillFromDB($row);
-			$carts[] = $cart;
-		} return $carts;
+		}
+		return $carts;
 	}
-
-	public function getCart2($id) {
-		$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id where gh.user_id = :id');
-		$stmt->execute(['id' => $id]);
-		return $stmt->fetch();
-	}
-
-	public function getCart3($id,$product_id) {
+	
+//Dung de them san pham vao gio hang cua nguoi dung
+	public function getCart3($id, $product_id)
+	{
 		$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id where gh.user_id = :id and ctgh.product_id = :product_id');
 		$stmt->execute(['id' => $id, 'product_id' => $product_id]);
-		 if ($row = $stmt->fetch()) {
+		if ($row = $stmt->fetch()) {
 			$this->fillFromDB($row);
 			return $this;
-		} return null;
+		}
+		return null;
 	}
-
-	// public function getUser()
-	// {
-	// 	$users = [];
-	// 	$stmt = $this->db->prepare('select * from nguoidung where admin = 0');
-	// 	$stmt->execute();
-	// 	while ($row = $stmt->fetch()) {
-	// 		$user = new User($this->db);
-	// 		$user->fillFromDB($row);
-	// 		$users[] = $user;
-	// 	} return $users;
-	// } 
 
 	protected function fillFromDB(array $row)
 	{
 		[
-		'cart_id' => $this->id,
-		'user_id' => $this->userID,
-		'added_day' => $this->added_day,
-		'updated_day' => $this->updated_day,
-		'product_id' => $this->product_id,
-		'quantity' => $this->quantity
+			'cart_id' => $this->id,
+			'user_id' => $this->userID,
+			'added_day' => $this->added_day,
+			'updated_day' => $this->updated_day,
+			'product_id' => $this->product_id,
+			'quantity' => $this->quantity
 		] = $row;
 		return $this;
 	}
- 
+
 	public function save()
 	{
 		$result = false;
@@ -134,96 +108,180 @@ class Cart
 			quantity = :quantity, updated_day = now()
 			where cart_id = :cart_id');
 			$result = $stmt->execute([
-			'product_id' => $this->product_id,
-			'quantity' => $this->quantity,
-			'cart_id' => $this->id]);
+				'product_id' => $this->product_id,
+				'quantity' => $this->quantity,
+				'cart_id' => $this->id
+			]);
 		} else {
 			$stmt = $this->db->prepare(
-			'insert into chitietgiohang (product_id, quantity, added_day, updated_day)
-			values (:product_id, :quantity, now(), now())');
+				'insert into chitietgiohang (product_id, quantity, added_day, updated_day)
+			values (:product_id, :quantity, now(), now())'
+			);
 			$result = $stmt->execute([
-			'product_id' => $this->product_id,
-			'quantity' => $this->quantity]);
+				'product_id' => $this->product_id,
+				'quantity' => $this->quantity
+			]);
 			if ($result) {
 				$this->id = $this->db->lastInsertId();
 			}
-		} return $result;
+		}
+		return $result;
 	}
-
-	// public function find($id)
-	// {
-	// 	$stmt = $this->db->prepare('select * from nguoidung where id = :id');
-	// 	$stmt->execute(['id' => $id]);
-	// 	if ($row = $stmt->fetch()) {
-	// 		$this->fillFromDB($row);
-	// 		return $this;
-	// 	} return null;
-	// } 
-	// public function update(array $data)
-	// {
-	// 	$this->fill($data);
-	// 	if ($this->validate()) {
-	// 		return $this->save();
-	// 	} return false;
-	// }
-
-	// public function delete()
-	// {
-	// 	$stmt = $this->db->prepare('delete from nguoidung where id = :id');
-	// 	return $stmt->execute(['id' => $this->id]);
-	// }
-
-	public function delete_cart($cart_id,$product_id)
-	{
-		$stmt = $this->db->prepare('delete from chitietgiohang where cart_id = :cart_id and product_id = :product_id');
-		return $stmt->execute(['cart_id' => $cart_id,'product_id' => $product_id]);
-	}
-
-	
+	//Tim kim dua tren id user
 	public function find($id)
 	{
-		$sql = "select * from giohang where user_id = :id";
-		$query = $this->db->prepare($sql);
-		$query->execute(['id' => $id]);
-		return $query->fetch();
-	} 
+		$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id where gh.user_id = :id');
+		$stmt->execute(['id' => $id]);
+		if ($row = $stmt->fetch()) {
+			$this->fillFromDB($row);
+			return $this;
+		}
+		return null;
+	}
 
-	public function update_cart($id,$quantity,$product_id) {
+	//Tim kiem don hang????
+	public function find2($cart_id, $product_id)
+	{
+		$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id where gh.cart_id = :id and ctgh.product_id = :product_id');
+		$stmt->execute(['id' => $cart_id, 'product_id' => $product_id]);
+		if ($row = $stmt->fetch()) {
+			$this->fillFromDB($row);
+			return $this;
+		}
+		return null;
+	}
+	///Tim kim dua tren id cua gio hang
+	public function findCart($id)
+	{
+		$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id where gh.cart_id = :id');
+		$stmt->execute(['id' => $id]);
+		if ($row = $stmt->fetch()) {
+			$this->fillFromDB($row);
+			return $this;
+		}
+		return null;
+	}
+
+	public function update(array $data)
+	{
+		$this->fill($data);
+		if ($this->validate()) {
+			return $this->save();
+		}
+		return false;
+	}
+
+	public function delete()
+	{
+		$stmt = $this->db->prepare('delete from giohang where id = :id');
+		return $stmt->execute(['id' => $this->id]);
+	}
+
+	//Xoa san pham khoi gio hang
+	public function delete_detail()
+	{
+		$stmt = $this->db->prepare('delete from chitietgiohang where cart_id = :cart_id and product_id = :product_id');
+		return $stmt->execute([
+			'cart_id' => $this->getId(),
+			'product_id' => $this->product_id
+		]);
+	}
+
+	public function delete_cart()
+	{
+		$stmt = $this->db->prepare('delete from chitietgiohang where cart_id =: cart_id and product_id =:product_id');
+		return $stmt->execute(['cart_id' => $this->cart_id, 'product_id' => $this->product_id]);
+	}
+
+	public function update_cart(array $data)
+	{
+		$this->fill($data);
+		if ($this->validate()) {
+			return $this->update_cart2();
+		}
+		return false;
+	}
+
+
+	//Cap nhan lai gio hang
+	public function update_cart2()
+	{
 		$sql = "update chitietgiohang set quantity = :quantity where (cart_id = :cart_id and product_id = :product_id)";
-    	$query = $this->db->prepare($sql);
-    	return $query->execute([
-    		'cart_id' => $id,
-        	'quantity' => $quantity,
-        	'product_id' => $product_id
-    	]);
+		$query = $this->db->prepare($sql);
+		$result = $query->execute([
+			'cart_id' => $this->getId(),
+			'quantity' => $this->quantity,
+			'product_id' => $this->product_id
+		]);
+		if ($result) {
+			$this->id = $this->db->lastInsertId();
+		}
+		return $result;
 	}
 
-	public function insert_cart($id,$product_id,$quantity) {
+	public function insert_cart(array $data)
+	{
+		$this->fill($data);
+		if ($this->validate()) {
+			return $this->insert_cart2();
+		}
+		return false;
+	}
+
+	//Them san pham vao gio hang
+	public function insert_cart2()
+	{
 		$sql = "insert into chitietgiohang (cart_id, product_id, quantity) values (:cart_id, :product_id, :quantity)";
-    	$query = $this->db->prepare($sql);
-    	$query->execute([
-        	'cart_id' => $id,
-        	'product_id' => $product_id,
-        	'quantity' => $quantity
-    	]);
+		$query = $this->db->prepare($sql);
+		$result = $query->execute([
+			'cart_id' => $this->getId(),
+			'product_id' => $this->product_id,
+			'quantity' => $this->quantity
+		]);
+		if ($result) {
+			$this->id = $this->db->lastInsertId();
+		}
+		return $result;
 	}
 
-	public function addNewCart($user_id,$cart_id,$product_id,$quantity) {
+
+
+	public function addNewCart(array $data)
+	{
+		$this->fill($data);
+		if ($this->validate()) {
+			return $this->addNewCart2();
+		}
+		return false;
+	}
+
+	////////Tao ra  1 gio hang cho user, moi user se co 1 gio hang khi dang nhap
+	public function addNewCart2()
+	{
 		$sql = "insert into giohang (user_id, added_day, updated_day) values (:user_id, now(), now())";
-	    $query = $this->db->prepare($sql);
-	    $query->execute([
-	        'user_id' => $user_id
-	    ]);
-	    $sql = "select * from giohang order by cart_id desc limit 0,1";
-	    $query = $this->db->prepare($sql);
-	    $query->execute();
-	    // $result = $query->fetch();
-	    $sql = "insert into chitietgiohang (cart_id, product_id, quantity) values (:cart_id, :product_id, :quantity)";
-	    $query = $this->db->prepare($sql);
-	    $query->execute([
-	    	'cart_id' => $cart_id,
-	       	'product_id' => $product_id,
-	       	'quantity' => $quantity
-	    ]);
+		$query = $this->db->prepare($sql);
+		// echo $this->$userID;
+		$result1 = $query->execute([
+			'user_id' => $this->userID
+		]);
+		if ($result1) {
+			$this->id = $this->db->lastInsertId();
+		}
+		$sql = "select * from giohang order by cart_id desc limit 0,1";
+		$query = $this->db->prepare($sql);
+		$result = $query->execute();
+		// echo $this->getId();
+		// $result = $query->fetch();
+		$sql = "insert into chitietgiohang (cart_id, product_id, quantity) values (:cart_id, :product_id, :quantity)";
+		$query = $this->db->prepare($sql);
+		$result2 = $query->execute([
+			'cart_id' => $this->getId(),
+			'product_id' => $this->product_id,
+			'quantity' => $this->quantity
+		]);
+		if ($result) {
+			$this->id = $this->db->lastInsertId();
+		}
+		return $result;
 	}
 }

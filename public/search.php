@@ -60,7 +60,7 @@ $products = $product->all();
 						</a>
 
 						<div class="text-uppercase p-3 font-weight-bold"><?= htmlspecialchars($product->name) ?></div>
-						<div class="p-3 font-weight-bold"><?php $ct =  $category->getCategory($product->category_id);
+						<div class="p-3 font-weight-bold"><?php $ct =  $category->find($product->category_id);
 															echo $ct->category_name; ?></div>
 						<div><b>Giá:</b> <i class="text-danger"> <?php echo number_format($product->price, 0, '', '.'); ?> VNĐ</i></div>
 						<hr>

@@ -4,14 +4,9 @@ include "C:/xampp/apps/project/bootstrap.php";
 // use CT275\Project\Product;
 // use CT275\Project\User;
 use CT275\Project\Category;
-
-// $product = new Product($PDO);
-// $user = new User($PDO);
 $category = new Category($PDO);
-// $users = $user->getUser();
-// $products = $product->all();
+
 $categorys = $category->all();
-// $category = $category->getId();
 
 ?>
 <!DOCTYPE html>
@@ -34,13 +29,11 @@ $categorys = $category->all();
     <link href="<?= BASE_URL_PATH . "css/animate.css" ?>" rel=" stylesheet">
     <link href="<?= BASE_URL_PATH . "css/style.css" ?>" rel=" stylesheet">
 </head>
-
 <body>
     <!-- Main Page Content -->
     <div class="container">
         <?php include "../../partials/nav_admin.php"; ?>
         <!-- Tab panes -->
-
         <div id="menu1" class="container"><br>
             <div class="offset-3 col-6">
                 <form action="add_category.php" enctype="multipart/form-data" method="post">
@@ -48,14 +41,12 @@ $categorys = $category->all();
                         <tr>
                             <th colspan="2" class="text-center title">THÊM DANH MỤC MỚI</th>
                         </tr>
-
                         <tr>
                             <td>Tên danh mục</td>
                             <td><input require type="text" name="category_name" placeholder="Nhập tên danh mục" value="<?php if (isset($_GET['category_name'])) {
-                                                                                                                    echo $_GET['category_name'];
-                                                                                                                } ?>"></td>
+                                                                                                                            echo $_GET['category_name'];
+                                                                                                                        } ?>"></td>
                         </tr>
-                        
                         <tr>
                             <td colspan="2" class="text-right">
                                 <button type="submit" class="btn btn-primary">
@@ -86,45 +77,30 @@ $categorys = $category->all();
                                 <td><?= htmlspecialchars($category->category_name) ?></td>
                                 <td><a class="btn btn-sm btn-danger" href="del_category.php?id=<?php echo $categoryID; ?>"><i class="fa fa-trash" aria-hidden="true"> XÓA</i></a>
                                     <a id="edit" class="btn btn-sm btn-warning" href="edit_category.php?id=<?php echo $categoryID; ?>"><i class="fa fa-pencil-square-o" aria-hidden="true"> SỬA</i></a>
-                                    <!-- <script type="text/javascript">
-                      $onclick = document.getElementsById('edit');
-                      $onclick.addEventListener("click", function edit() {
-                        alert("Hello");
-                      });
 
-                    </script> -->
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-
         </div>
-
     </div>
-
-
     <?php include('C:/xampp/apps/project/partials/footer.php'); ?>
     </div>
-
-
     <script src="<?= BASE_URL_PATH . " js/wow.min.js" ?>">
     </script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"> </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"> </script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"> </script>
-
     <script>
         $(document).ready(function() {
             $('#product').DataTable();
             $('.dataTables_length').addClass('bs-select');
         });
     </script>
-
 </body>
 
 </html>

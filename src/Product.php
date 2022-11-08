@@ -11,7 +11,6 @@ class Product
 	public $price;
 	public $description;
 	public $category_id;
-
 	public $image;
 	public $created_day;
 	public $updated_day;
@@ -27,32 +26,7 @@ class Product
 		$this->db = $pdo;
 	}
 
-	// public function fill(array $data)
-	// {
-	// 	if (isset($data['name'])) {
-	// 		$this->name = trim($data['name']);
-	// 	}
-
-	// 	if (isset($data['price'])) {
-	// 		$this->price = preg_replace('/\D+/', '', $data['price']);
-	// 	}
-
-	// 	if (isset($data['description'])) {
-	// 		$this->description = trim($data['description']);
-	// 	}
-
-	// 	if (isset($data['category_name'])) {
-	// 		$this->category_name = trim($data['category_name']);
-	// 	}
-
-	// 	if (isset($data['image'])) {
-	// 		$this->image = trim($data['image']);
-	// 	}
-
-	// 	return $this;
-	// }
-
-//Lay du lieu Product tu CSDL
+//Them du lieu vao csdl tu input cua nguoi dung nhap vao
 	public function fill(array $data, $file)
 	{
 		if (isset($data['name'])) {
@@ -108,7 +82,7 @@ class Product
 
 		return empty($this->errors);
 	}
-	//??
+	//Lay du lieu tu csdl table sanpham
 	protected function fillFromDB(array $row)
 	{
 		[
@@ -149,38 +123,6 @@ class Product
 		} return $products;
 	}
 
-	//Lay san pham dua vao id
-	public function getProduct($id)
-	{
-		$stmt = $this->db->prepare('select * from sanpham where id = :id');
-		$stmt->execute(['id' => $id]);
-		if ($row = $stmt->fetch()) {
-			$this->fillFromDB($row);
-			return $this;
-		} return null;
-	}
-	public function getProduct2($category_id)
-	{
-		$stmt = $this->db->prepare('select * from sanpham where category_id = :category_id');
-		$stmt->execute(['category_id' => $category_id]);
-		if ($row = $stmt->fetch()) {
-			$this->fillFromDB($row);
-			return $this;
-		} return null;
-	}
-	//Lay san pham co ten category
-	// public function getProduct2()
-	// {
-	// 	$products = [];
-	// 	$stmt = $this->db->prepare('select * from sanpham, category where sanpham.category_id = category.category_id');
-	// 	$stmt->execute();
-	// 	while ($row = $stmt->fetch()) {
-	// 		$product = new Product($this->db);
-	// 		$product->fillFromDB($row);
-	// 		$products[] = $product;
-	// 	} return $products;
-	// }
-
 	//Cap nhat hoac insert vao table
 	public function save()
 	{
@@ -213,7 +155,6 @@ class Product
 			}
 			$imgname = $this->image;
 			move_uploaded_file($_FILES['image']['tmp_name'], 'C:/xampp/apps/project/public/img/upload/'.$imgname);
-			//move_uploaded_file : di chuyen tep da tai len den file moi vua tao
 		} return $result;
 	}
 
@@ -258,7 +199,7 @@ class Product
 	}
 
 
-	//Tim kiem san pham dua tren Name va Category_name
+	//Tim kiem san pham dua tren Ten san pham va Ten danh muc san pham
 	public function search($tukhoa)
 	{
 		$products = [];
@@ -273,3 +214,4 @@ class Product
 
 
 }
+

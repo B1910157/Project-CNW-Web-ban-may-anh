@@ -21,32 +21,7 @@ class Category
 		$this->db = $pdo;
 	}
 
-	// public function fill(array $data)
-	// {
-	// 	if (isset($data['name'])) {
-	// 		$this->name = trim($data['name']);
-	// 	}
-
-	// 	if (isset($data['price'])) {
-	// 		$this->price = preg_replace('/\D+/', '', $data['price']);
-	// 	}
-
-	// 	if (isset($data['description'])) {
-	// 		$this->description = trim($data['description']);
-	// 	}
-
-	// 	if (isset($data['category_name'])) {
-	// 		$this->category_name = trim($data['category_name']);
-	// 	}
-
-	// 	if (isset($data['image'])) {
-	// 		$this->image = trim($data['image']);
-	// 	}
-
-	// 	return $this;
-	// }
-
-//Lay du lieu Product tu CSDL
+//dien thong tin   vao csdl
 	public function fill(array $data)
 	{
 		if (isset($data['category_name'])) {
@@ -68,7 +43,7 @@ class Category
 		}
 		return empty($this->errors);
 	}
-	//??
+	//Lay du lieu tu csdl
 	protected function fillFromDB(array $row)
 	{
 		[
@@ -90,31 +65,7 @@ class Category
 		} return $categorys;
 	} 
 
-
-
-	//Lay danh muc dua vao id
-	public function getCategory($category_id)
-	{
-		$stmt = $this->db->prepare('select * from category where category_id = :category_id');
-		$stmt->execute(['category_id' => $category_id]);
-		if ($row = $stmt->fetch()) {
-			$this->fillFromDB($row);
-			return $this;
-		} return null;
-	}
-
-	public function getCategory2()
-	{
-		$categorys = [];
-		$stmt = $this->db->prepare('select * from category, sanpham where category.category_id = :category_id');
-		$stmt->execute();
-		while ($row = $stmt->fetch()) {
-			$category = new Category($this->db);
-			$category->fillFromDB($row);
-			$categorys[] = $category;
-		} return $categorys;
-	} 
-
+	
 	//Cap nhat hoac insert vao table
 	public function save()
 	{
@@ -161,30 +112,21 @@ class Category
 			return $this->save();
 		} return false; 
 	}
-	//Xoa danh muuic trong gio hang
-	public function delete($category_id)
+	//Kiem tra rang buoc khoa ngoai khi xoa
+	//Neu danh muc muon xoa co ton tai san pham thi danh muc nat khong duoc xoa
+	public function validateToDelete()
 	{
-		$stmt = $this->db->prepare('delete from category where category.category_id = :category_id');
-		return $stmt->execute(['category_id' => $category_id]);
-	}
-
-	public function delete2()
-	{
-		$flag = 0;
-		$checkproduct = $this->db->prepare('select * from sanpham');
-		$checkproduct->execute();
-		foreach ($checkproduct as $category) {
-			if ($category['category_id'] == $this->category_id) {
-				$flag  = 1;
-			} else { 
-				$flag  = 0;
-			}
-		}
-		if ($flag == 0) {
-			$stmt = $this->db->prepare('delete from category where category.category_id = :category_id');
-			return $stmt->execute(['category_id' => $this->category_id]);
-		} else return null;
+		$checkproduct = $this->db->query("select * from sanpham where category_id = '$this->category_id'")->rowCount();
+		if ($checkproduct != 0) {
+			return false;
+		} 
+		return true;
 		
+	}
+	public function delete()
+	{
+		$stmt = $this->db->prepare('delete from category where category_id = :category_id');
+		return $stmt->execute(['category_id' => $this->category_id]);
 	}
 
 

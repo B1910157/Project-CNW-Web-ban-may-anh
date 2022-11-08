@@ -5,6 +5,7 @@ include "C:/xampp/apps/project/bootstrap.php";
 use CT275\Project\Product;
 use CT275\Project\User;
 use CT275\Project\Category;
+
 $product = new Product($PDO);
 $category =  new Category($PDO);
 $categorys = $category->all();
@@ -38,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -85,7 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option hidden>--- Chọn danh mục --- </option>
                     <?php foreach ($categorys as $category) :
                       $categoryID = $category->getId(); ?>
-                      <option> <?php echo htmlspecialchars($category->getId()); echo htmlspecialchars($category->category_name) ?></option>
+                      <option> <?php echo htmlspecialchars($category->getId());
+                                echo htmlspecialchars($category->category_name) ?></option>
                     <?php endforeach; ?>
                   </select>
                 </td>

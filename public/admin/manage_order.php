@@ -8,7 +8,7 @@ use CT275\Project\Order;
 $order = new Order($PDO);
 $user = new User($PDO);
 
-$getAllOrder = $order->getAll();
+$getAllOrder = $order->all();
 ?>
 <!DOCTYPE html>
 <html lang="en">

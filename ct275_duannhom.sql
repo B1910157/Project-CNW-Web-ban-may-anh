@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 07, 2022 lúc 09:35 AM
+-- Thời gian đã tạo: Th10 08, 2022 lúc 03:56 PM
 -- Phiên bản máy phục vụ: 10.4.24-MariaDB
 -- Phiên bản PHP: 8.0.19
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `ct275_update`
+-- Cơ sở dữ liệu: `ct275_duannhom`
 --
 
 -- --------------------------------------------------------
@@ -55,6 +55,13 @@ CREATE TABLE `chitietgiohang` (
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `chitietgiohang`
+--
+
+INSERT INTO `chitietgiohang` (`cart_id`, `product_id`, `quantity`) VALUES
+(27, 40, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -76,7 +83,11 @@ CREATE TABLE `donhang` (
 
 INSERT INTO `donhang` (`order_id`, `user_id`, `cart_id`, `total_price`, `status`, `created_day`) VALUES
 (2, 10, 21, 191300000, 1, '2022-11-05 12:56:07'),
-(3, 10, 22, 7100000, 0, '2022-11-05 13:06:42');
+(3, 10, 22, 7100000, 0, '2022-11-05 13:06:42'),
+(4, 10, 23, 36100000, 0, '2022-11-07 09:31:47'),
+(5, 7, 25, 387400000, 1, '2022-11-08 06:14:34'),
+(6, 7, 26, 60100000, 1, '2022-11-08 12:54:08'),
+(7, 10, 24, 760500000, 1, '2022-11-08 12:55:55');
 
 -- --------------------------------------------------------
 
@@ -96,7 +107,8 @@ CREATE TABLE `giohang` (
 --
 
 INSERT INTO `giohang` (`cart_id`, `user_id`, `added_day`, `updated_day`) VALUES
-(20, 8, '2022-11-05 12:53:24', '2022-11-05 12:53:24');
+(20, 8, '2022-11-05 12:53:24', '2022-11-05 12:53:24'),
+(27, 8, '2022-11-08 13:58:06', '2022-11-08 13:58:06');
 
 -- --------------------------------------------------------
 
@@ -158,7 +170,8 @@ INSERT INTO `sanpham` (`id`, `name`, `price`, `description`, `category_id`, `ima
 (15, 'Máy Ảnh Fujifilm X-A5 Kit 15-45 mm', 13800000, 'TecHland – nhà phân phối chính thức các sản phẩm Máy Ảnh Fujifilm X-A5 chính hãng giá rẻ tại Cần thơ', 2, 'fuji2.PNG', '2022-11-04 05:18:23', '2022-11-05 12:03:45'),
 (16, 'Flycam DJI Mavic Air Chất lượng cao', 15500000, 'TecHland chuyên cung cấp các sản phẩm máy bay điều khiển Flycam DJI Mavic Air chính hãng giá rẻ tại Cần thơ', 3, 'flycam1.PNG', '2022-11-04 12:36:59', '2022-11-05 12:51:11'),
 (17, 'Máy Ảnh Hasselblad X1D-50c Body', 29000000, 'TecHland chuyên cung cấp sản phẩm Máy Ảnh Hasselblad X1D-50c Body chính hãng với giá rẻ tại Cần thơ', 5, 'has1.PNG', '2022-11-05 12:07:55', '2022-11-05 12:08:22'),
-(18, 'Máy Quay Camera Hành Trình GoPro Hero 8', 7100000, 'Quay video 4K UHD & slow motion\r\n•  Ổn định videoHyperSmooth 2.0\r\n•  Ổn định cho video time-lapse TimeWarp 2.0\r\n•  Chụp ảnh SuperPhoto 12MP hỗ trợ HDR', 4, 'cam1.PNG', '2022-11-05 12:10:26', '2022-11-05 12:10:50');
+(18, 'Máy Quay Camera Hành Trình GoPro Hero 8', 7100000, 'Quay video 4K UHD & slow motion\r\n•  Ổn định videoHyperSmooth 2.0\r\n•  Ổn định cho video time-lapse TimeWarp 2.0\r\n•  Chụp ảnh SuperPhoto 12MP hỗ trợ HDR', 4, 'cam1.PNG', '2022-11-05 12:10:26', '2022-11-05 12:10:50'),
+(40, 'A', 9090909, 'AE', 3, 'Array', '2022-11-08 13:57:59', '2022-11-08 13:57:59');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -211,19 +224,19 @@ ALTER TABLE `sanpham`
 -- AUTO_INCREMENT cho bảng `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT cho bảng `donhang`
 --
 ALTER TABLE `donhang`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `giohang`
 --
 ALTER TABLE `giohang`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT cho bảng `nguoidung`
@@ -235,7 +248,7 @@ ALTER TABLE `nguoidung`
 -- AUTO_INCREMENT cho bảng `sanpham`
 --
 ALTER TABLE `sanpham`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

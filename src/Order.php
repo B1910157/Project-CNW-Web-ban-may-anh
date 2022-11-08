@@ -31,7 +31,7 @@ class Order
 			return $this->insertOrder2();
 		} return false;
 	}
-///???
+	///Them san pham vao gio hang
 	public function insertOrder2(){
 		$total_price = 0;
 		$result = $this->db->prepare('select gh.*,ctgh.quantity,sp.price from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id inner join sanpham sp on ctgh.product_id = sp.id where gh.cart_id = :cart_id');

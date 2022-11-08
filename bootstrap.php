@@ -13,7 +13,7 @@ $loader->addNamespace('CT275\Project', __DIR__ .'/src');
 try {
 $PDO = (new CT275\Project\PDOFactory)->create([
 'dbhost' => 'localhost',
-'dbname' => 'ct275_update',
+'dbname' => 'ct275_duannhom',
 'dbuser' => 'root',
 'dbpass' => ''
 ]);

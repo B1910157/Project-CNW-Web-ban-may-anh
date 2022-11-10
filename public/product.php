@@ -13,6 +13,12 @@ if (isset($_SESSION["id_user"])) {
 	$user->find($_SESSION["id_user"]);
 }
 
+$id_cat = isset($_REQUEST['category_id']) ?
+    filter_var($_REQUEST['category_id'], FILTER_SANITIZE_NUMBER_INT) : -1;
+if ($id_cat < 0 || !($category->find($id_cat))) {
+    redirect(BASE_URL_PATH);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

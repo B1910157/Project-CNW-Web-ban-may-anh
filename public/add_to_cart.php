@@ -36,7 +36,7 @@ if (isset($checkcart) && $checkcart != null) {
     	echo '<script>window.location.href = "detail.php?id='.$_GET['id'].'"</script>';
 	}
 } else {
-	$result = $cart->find($_SESSION['id_user']);
+	$result = $cart->findUserCart($_SESSION['id_user']);
 	if ($result == null) {
 		$array3 = [];
 		$array3['userID'] = $_SESSION['id_user'];

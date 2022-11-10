@@ -57,26 +57,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <form method="post" action="process.php" id="signupForm">
                                         <div class="form-outline mb-4">
                                             <label class="form-label text-info">Họ tên của bạn</label>
-                                            <input type="text" class="form-control form-control-lg" name="fullname" />
+                                            <input autocomplete="off"  type="text" class="form-control form-control-lg" name="fullname" />
                                         </div>
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label text-info">Tên đăng nhập</label>
-                                            <input type="text" class="form-control form-control-lg" name="username" />
+                                            <input autocomplete="off" type="text" class="form-control form-control-lg" name="username" />
                                         </div>
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label text-info">Mật khẩu</label>
-                                            <input type="password" class="form-control form-control-lg" name="password" id="password" />
+                                            <input autocomplete="off" type="password" class="form-control form-control-lg" name="password" id="password" />
                                         </div>
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label text-info">Nhập lại mật khẩu</label>
-                                            <input type="password" class="form-control form-control-lg" name="password2" />
+                                            <input autocomplete="off" type="password" class="form-control form-control-lg" name="password2" />
                                         </div>
                                         <div class="form-outline mb-4">
                                             <label class="form-label text-info">Địa chỉ của bạn</label>
-                                            <input type="text" class="form-control form-control-lg" name="diachi" />
+                                            <input autocomplete="off" type="text" class="form-control form-control-lg" name="diachi" />
                                         </div>
 
                                         <!-- <div class="form-check justify-content-center mb-5">

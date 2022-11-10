@@ -125,7 +125,7 @@ $categorys = $category->all();
                                 <td><?= htmlspecialchars($productID) ?></td>
                                 <td><?= htmlspecialchars($product->name) ?></td>
                                 <td><img class="w-75 h-75" src="../img/upload/<?= htmlspecialchars($product->image) ?>" alt=""></td>
-                                <td><?= htmlspecialchars($product->category_id) ?></td>
+                                <td><?php $ct =  $category->find($product->category_id); echo $ct->category_name;?></td>
                                 <td><?= htmlspecialchars($product->price) ?></td>
                                 <td><?= htmlspecialchars($date) ?></td>
                                 <td><a class="btn btn-sm btn-danger" href="del_Product.php?id=<?php echo $productID; ?>"><i class="fa fa-trash" aria-hidden="true"> XÓA</i></a>

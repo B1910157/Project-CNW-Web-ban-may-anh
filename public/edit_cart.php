@@ -10,14 +10,17 @@ if (isset($_GET)) {
 }
 
 $cart = new Cart($PDO);
-$edit_cart = $cart->update_cart($cart_id,$quantity,$product_id);
-// $sql = "update chitietgiohang set quantity = :quantity where (cart_id = :cart_id and product_id = :product_id)";
-// $query = $PDO->prepare($sql);
-// $query->execute([
-//         'quantity' => $quantity,
-//         'cart_id' => $cart_id,
-//         'product_id' => $product_id
-//     ]);
+$array = [];
+$array['cart_id'] = $cart_id;
+$array['quantity'] = $quantity;
+$array['productID'] = $product_id;
+if ($cart->find2($array['cart_id'],$array['productID'])) {
+	$edit_cart = $cart->update_cart($array);
 echo '<script>alert("Đã cập nhật số lượng sản phẩm.");</script>';
 echo '<script>window.location.href= "cart.php";</script>';
+} else {
+	echo '<script>alert("Cập nhật số lượng sản phẩm không thành công.");</script>';
+	echo '<script>window.location.href= "cart.php";</script>';
+}
+
 ?>

@@ -138,7 +138,28 @@ class Cart
 		}
 		return null;
 	}
-	
+	public function findUserCart($id)
+	{
+		$stmt = $this->db->prepare('select * from giohang where user_id = :id');
+		$stmt->execute(['id' => $id]);
+		if ($row = $stmt->fetch()) {
+			$this->fillFromDB($row);
+			return $this;
+		}
+		return null;
+	}
+	//Tim de sua san pham trong gio hang
+	public function find2($cart_id,$product_id)
+	{
+		$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id where gh.cart_id = :id and ctgh.product_id = :product_id');
+		$stmt->execute(['id' => $cart_id,'product_id' => $product_id]);
+		if ($row = $stmt->fetch()) {
+			$this->fillFromDB($row);
+			return $this;
+		} return null;
+	} 
+
+
 	///Tim kim dua tren id cua gio hang
 	public function findCart($id)
 	{

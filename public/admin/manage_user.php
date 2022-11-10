@@ -88,8 +88,8 @@ $products = $product->all();
                         <tr>
                             <th>ID</th>
                             <th>Họ Tên</th>
-                            <th>Ngày Tạo TK</th>
-                            <th>Tùy Chọn</th>
+                            <th>Ngày Tạo Tài Khoản</th>
+                            <th>Địa chỉ</th>
                         </tr>
 
                     </thead>
@@ -103,10 +103,8 @@ $products = $product->all();
                                 <td><?= htmlspecialchars($userID) ?></td>
                                 <td><?= htmlspecialchars($user->fullname) ?></td>
                                 <td><?= htmlspecialchars($date) ?></td>
-
-                                <td class="text-center">
-                                    <a class="btn btn-danger btn-sm" href="del_User.php?id=<?php echo $userID; ?>"> <i class="fa fa-trash" aria-hidden="true">XÓA</i></a>
-                                </td>
+                                <td><?= htmlspecialchars($user->diachi) ?></td>
+                                
 
                             </tr>
                         <?php endforeach ?>
@@ -114,10 +112,6 @@ $products = $product->all();
                     </tbody>
                 </table>
             </div>
-
-
-
-
             <?php include('C:/xampp/apps/project/partials/footer.php'); ?>
         </div>
 

@@ -24,10 +24,10 @@ if (!isset($_SESSION['id_user'])) {
             <a class="nav-link " href="manage_user.php">Quản lý người dùng</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="manage_Pro.php">Quản lý sản phẩm</a>
+            <a class="nav-link" href="manage_category.php">Quản lý danh mục sản phẩm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="manage_category.php">Quản lý danh mục sản phẩm</a>
+            <a class="nav-link" href="manage_Pro.php">Quản lý sản phẩm</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="manage_order.php">Quản lý đơn hàng</a>

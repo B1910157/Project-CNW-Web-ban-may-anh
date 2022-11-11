@@ -130,7 +130,7 @@ class Product
 	public function save()
 	{
 		$result = false;
-		if ($this->id >= 0) {
+		if ($this->id > 0) {
 			$stmt = $this->db->prepare('update sanpham set name = :name,
 			price = :price, description = :description, category_id = :category_id, image = :image, updated_day = now()
 			where id = :id');

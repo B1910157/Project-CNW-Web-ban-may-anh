@@ -79,13 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <input autocomplete="off" type="text" class="form-control form-control-lg" name="diachi" />
                                         </div>
 
-                                        <!-- <div class="form-check justify-content-center mb-5">
-                                            <input class="form-check-input " type="checkbox" value="" />
-                                            <label class="form-check-label">
-                                                Tôi đồng ý với <a href="" class="text-body"><u>điều khoản dịch vụ</u></a>
-                                            </label>
-                                        </div> -->
-
                                         <div class="d-flex justify-content-center">
                                             <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Đăng ký</button>
                                         </div>
@@ -137,7 +130,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     diachi: {
                         required: true
                     }
-
                 },
 
                 messages: {

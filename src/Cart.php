@@ -76,6 +76,7 @@ class Cart
 	}
 	
 //Dung de them san pham vao gio hang cua nguoi dung
+//Ham nay dung de tim gio hang cua nguoi dung dua vao id, va cac san pham trong gio hang dua vao product_id
 	public function getCart3($id, $product_id)
 	{
 		$stmt = $this->db->prepare('select gh.*,ctgh.product_id,ctgh.quantity from giohang gh inner join chitietgiohang ctgh on gh.cart_id = ctgh.cart_id where gh.user_id = :id and ctgh.product_id = :product_id');

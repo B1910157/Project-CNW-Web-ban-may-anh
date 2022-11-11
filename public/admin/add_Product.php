@@ -7,10 +7,12 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$product = new Product($PDO);
 	$product->fill($_POST,$_FILES);
+	echo "<pre>";
+	print_r($_FILES);
 	if ($product->validate()) {
 		$product->save(); 
 		echo '<script>alert("Thêm sản phẩm thành công.");</script>';
-		echo '<script>window.location.href= "manage_Pro.php";</script>';
+		// echo '<script>window.location.href= "manage_Pro.php";</script>';
 	} $errors = $product->getValidationErrors();
 	if (isset($errors['name'])) {
 		$price = $_POST['price'];

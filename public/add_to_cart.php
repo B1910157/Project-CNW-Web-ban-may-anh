@@ -11,13 +11,20 @@ $category = new Category($PDO);
 $cart = new Cart($PDO);
 $product = new Product($PDO);
 $product_detail = $product->find($_GET['id']);
+
+//Tim gio hang cua nguoi dung, va kiem tra san pham có id nay da co trong gio hang chua
 $checkcart = $cart->getCart3($_SESSION['id_user'],$product_detail->getId());
+
+//Truong hop nguoi dung da co gio hang
 if (isset($checkcart) && $checkcart != null) {
 	$inStock = 0;
+	//Neu san pham vua chon co khong co trong gio hang thi them vap, co thi cap nhat lai so luong
+	
 	if ($checkcart->product_id == $_GET['id']) {
 		$inStock = 1;
 	} else $inStock = 0;
 	if ($inStock == 1) {
+		//Trong gio hang ton tai san pham *do* -> Cap nhat so luong
 		$newVal = ($_GET['quantity']+$checkcart->quantity);
 		$array1 = [];
 		$array1['cart_id'] = $checkcart->getId();
@@ -27,6 +34,7 @@ if (isset($checkcart) && $checkcart != null) {
     	echo "<script>alert('Sản phẩm đã có trong giỏ hàng,đã cập nhật số lượng.');</script>";
     	echo '<script>window.location.href = "detail.php?id='.$_GET['id'].'"</script>';
 	} else {
+		//Trong gio hang chua co san pham *do* -> Them vao gio hang
 		$array2 = [];
 		$array2['cart_id'] = $checkcart->getId();
 		$array2['quantity'] = $newVal;
@@ -35,7 +43,10 @@ if (isset($checkcart) && $checkcart != null) {
     	echo "<script>alert('Đã thêm sản phẩm vào giỏ hàng!');</script>";
     	echo '<script>window.location.href = "detail.php?id='.$_GET['id'].'"</script>';
 	}
-} else {
+}
+//Truong hop nguoi dung chua co gio hang
+else {
+	//Tim gio hang cua nguoi dung, Neu null thi Tao gio hang moi cho nguoi dung
 	$result = $cart->findUserCart($_SESSION['id_user']);
 	if ($result == null) {
 		$array3 = [];

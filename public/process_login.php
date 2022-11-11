@@ -11,8 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = new User($PDO);
     $username = $_POST['username'];
     $password = $_POST['password'];
-    
+    //row tra ve so dong có username va password giong voi U P nguoi dung nhap vao 
     $row = $user->checkpoint($username,$password);
+    //result tra ve mang cac truong cua nguoi dung do [id, admin, fullname, username, password, diachi, created_day, updated_day]
     $results = $user->checkpoint2($username,$password);
     // $sql = "SELECT * from nguoidung where username =:u and password =:p";
     // $query = $PDO->prepare($sql);

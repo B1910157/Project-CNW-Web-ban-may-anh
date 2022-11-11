@@ -129,7 +129,7 @@ class User {
 	// da ton tai va yeu cau chon 1 username khac de dang nhap
 	public function findUsername($var)
 	{
-		$stmt = $this->db->prepare('select * from nguoidung where username = :var');
+		$stmt = $this->db->prepare('select * from nguoidung where binary username = :var');
 		$stmt->execute(['var' => $var]);
 		if ($row = $stmt->fetch()) {
 			$this->fillFromDB($row);
